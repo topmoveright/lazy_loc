@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Feat: Add escape sequence handling for translation keys
+
 ## 0.0.3
 
 * Feat: Add sort option for translation keys

@@ -16,7 +16,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lazy_loc: ^0.0.3
+  lazy_loc: ^0.0.4
   flutter_localizations:
     sdk: flutter
 ```

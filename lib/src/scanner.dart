@@ -25,11 +25,39 @@ class CodeScanner {
         final matches = regExp.allMatches(content);
         for (var match in matches) {
           if (match.group(2) != null) {
-            codeKeys.add(match.group(2)!);
+            codeKeys.add(_unescape(match.group(2)!));
           }
         }
       }
     }
     return codeKeys;
+  }
+
+  String _unescape(String input) {
+    return input.replaceAllMapped(RegExp(r'\\(.)'), (match) {
+      final char = match.group(1);
+      switch (char) {
+        case 'n':
+          return '\n';
+        case 'r':
+          return '\r';
+        case 't':
+          return '\t';
+        case 'b':
+          return '\b';
+        case 'f':
+          return '\f';
+        case '\\':
+          return '\\';
+        case "'":
+          return "'";
+        case '"':
+          return '"';
+        case '\$':
+          return '\$';
+        default:
+          return char!;
+      }
+    });
   }
 }
