@@ -2,30 +2,29 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+const String _path = 'assets/translations';
+
 class LazyLoc {
   // 1. Static variable to hold translated data
-  static Map<String, dynamic> _localizedValues = {};
+  static Map<String, String> _localizedValues = {};
 
   // Current Locale
   final Locale locale;
   LazyLoc(this.locale);
 
   // 2. Load function executed when Flutter changes Locale
-  static Future<LazyLoc> load(
-    Locale locale, {
-    String path = 'assets/translations',
-  }) async {
+  static Future<LazyLoc> load(Locale locale, {String path = _path}) async {
     // e.g. ko -> read assets/translations/ko.json
     // Using languageCode (e.g. 'en', 'ko') to match generated files
     final String fileName = locale.languageCode;
-    final String assetPath = '$path/$fileName.json';
+    final String assetPath = '$_path/$fileName.json';
 
     try {
       String jsonString = await rootBundle.loadString(assetPath);
-      Map<String, dynamic> jsonMap = json.decode(jsonString);
+      Map<String, String> jsonMap = json.decode(jsonString);
 
       // Store loaded data in static variable
-      _localizedValues = jsonMap.map(
+      _localizedValues = jsonMap.map<String, String>(
         (key, value) => MapEntry(key, value.toString()),
       );
     } catch (e) {
@@ -41,8 +40,9 @@ class LazyLoc {
 
   // 3. Translate function accessible from anywhere
   static String translate(String key) {
-    return _localizedValues[key] ??
-        key; // Return original key if translation missing
+    return (_localizedValues[key] ?? '').isNotEmpty
+        ? _localizedValues[key]!
+        : key;
   }
 
   // Helper to access from Flutter tree (optional)
@@ -56,10 +56,7 @@ class LazyLocDelegate extends LocalizationsDelegate<LazyLoc> {
   final List<Locale>? supportedLocales;
   final String path;
 
-  const LazyLocDelegate({
-    this.supportedLocales,
-    this.path = 'assets/translations',
-  });
+  const LazyLocDelegate({this.supportedLocales, this.path = _path});
 
   @override
   bool isSupported(Locale locale) {
@@ -73,7 +70,7 @@ class LazyLocDelegate extends LocalizationsDelegate<LazyLoc> {
 
   @override
   Future<LazyLoc> load(Locale locale) async {
-    return await LazyLoc.load(locale, path: path);
+    return await LazyLoc.load(locale);
   }
 
   @override
