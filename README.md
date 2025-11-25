@@ -16,7 +16,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lazy_loc: ^0.0.2
+  lazy_loc: ^0.0.3
   flutter_localizations:
     sdk: flutter
 ```
@@ -140,6 +140,10 @@ dart run lazy_loc --path "lib/features/**.dart"
 
 # Custom output directory (default: assets/translations)
 dart run lazy_loc --output "assets/i18n"
+
+# Sort order for keys (asc, desc, empty-first, empty-last)
+# Default: empty-first (Groups empty/untranslated keys at the top)
+dart run lazy_loc --sort empty-first
 
 # Specify target languages (comma-separated)
 # Default: ko,en

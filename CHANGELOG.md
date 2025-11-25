@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Feat: Add sort option for translation keys
+
 ## 0.0.2
 
 * Refactor: Improve type safety and simplify translation path handling

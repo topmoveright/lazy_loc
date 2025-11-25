@@ -25,6 +25,13 @@ void main(List<String> arguments) async {
       defaultsTo: LazyLocConfig.targetDir,
       help: 'Output directory for translation files',
     )
+    ..addOption(
+      'sort',
+      abbr: 's',
+      allowed: ['asc', 'desc', 'empty-first', 'empty-last'],
+      defaultsTo: 'empty-first',
+      help: 'Sort order of keys in output files',
+    )
     ..addMultiOption(
       'langs',
       abbr: 'l',
@@ -42,6 +49,7 @@ void main(List<String> arguments) async {
 
     final globPattern = argResults['path'] as String;
     final targetDir = argResults['output'] as String;
+    final sortOption = argResults['sort'] as String;
     final rawLangs = argResults['langs'] as List<String>;
 
     // Clean up languages (trim whitespace)
@@ -60,6 +68,7 @@ void main(List<String> arguments) async {
     Logger.info('   Scanning: $globPattern');
     Logger.info('   Output: $targetDir');
     Logger.info('   Languages: $targetLangs');
+    Logger.info('   Sort: $sortOption');
     Logger.info('');
 
     // 1. Scan
@@ -80,7 +89,11 @@ void main(List<String> arguments) async {
     Logger.info('⏳ Processing translation files...');
     final translationManager = TranslationManager(targetDir: targetDir);
     for (var lang in targetLangs) {
-      await translationManager.processLanguage(lang, codeKeys);
+      await translationManager.processLanguage(
+        lang,
+        codeKeys,
+        sortOption: sortOption,
+      );
     }
 
     Logger.info('');
