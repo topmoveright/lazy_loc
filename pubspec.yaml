@@ -1,6 +1,6 @@
 name: lazy_loc
 description: "LazyLoc is a lightweight localization package for Flutter that automates translation file management and provides a simple `.tr()` extension for string translation."
-version: 0.0.1
+version: 0.0.1+1
 homepage: https://topmoveright.github.io/lazy_loc
 repository: https://github.com/topmoveright/lazy_loc
 issue_tracker: https://github.com/topmoveright/lazy_loc/issues

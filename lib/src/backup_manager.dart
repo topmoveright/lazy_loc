@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'logger.dart';
 import 'config.dart';
 
 class BackupManager {
@@ -23,7 +24,7 @@ class BackupManager {
 
     final backupPath = p.join(backupDir.path, '${lang}_$timestamp.json');
     await originalFile.copy(backupPath);
-    print(
+    Logger.info(
       '      🛡️ Backup created: .../${LazyLocConfig.backupDirName}/$lang/${lang}_$timestamp.json',
     );
   }

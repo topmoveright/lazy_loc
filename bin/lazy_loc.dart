@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:lazy_loc/src/config.dart';
+import 'package:lazy_loc/src/logger.dart';
 import 'package:lazy_loc/src/scanner.dart';
 import 'package:lazy_loc/src/translation_manager.dart';
 
@@ -50,53 +51,53 @@ void main(List<String> arguments) async {
         .toList();
 
     if (targetLangs.isEmpty) {
-      print('❌ Error: No target languages specified.');
+      Logger.error('❌ Error: No target languages specified.');
       _printUsage(parser);
       exit(1);
     }
 
-    print('🚀 LazyLoc Sync Started...');
-    print('   Scanning: $globPattern');
-    print('   Output: $targetDir');
-    print('   Languages: $targetLangs');
-    print('');
+    Logger.info('🚀 LazyLoc Sync Started...');
+    Logger.info('   Scanning: $globPattern');
+    Logger.info('   Output: $targetDir');
+    Logger.info('   Languages: $targetLangs');
+    Logger.info('');
 
     // 1. Scan
-    print('⏳ Scanning for .tr() calls...');
+    Logger.info('⏳ Scanning for .tr() calls...');
     final scanner = CodeScanner(globPattern: globPattern);
     final codeKeys = await scanner.scan();
 
     if (codeKeys.isEmpty) {
-      print('⚠️  No translation keys found.');
-      print(
+      Logger.warn('⚠️  No translation keys found.');
+      Logger.warn(
         '   Check if your path pattern is correct and contains .tr() calls.',
       );
     } else {
-      print('🔍 Found ${codeKeys.length} unique keys in code.');
+      Logger.info('🔍 Found ${codeKeys.length} unique keys in code.');
     }
 
     // 2. Process
-    print('⏳ Processing translation files...');
+    Logger.info('⏳ Processing translation files...');
     final translationManager = TranslationManager(targetDir: targetDir);
     for (var lang in targetLangs) {
       await translationManager.processLanguage(lang, codeKeys);
     }
 
-    print('');
-    print('✅ All done!');
+    Logger.info('');
+    Logger.info('✅ All done!');
   } catch (e) {
-    print('❌ Error: $e');
-    print('');
+    Logger.error('❌ Error: $e');
+    Logger.error('');
     _printUsage(parser);
     exit(1);
   }
 }
 
 void _printUsage(ArgParser parser) {
-  print('LazyLoc - Lightweight Flutter Localization Tool');
-  print('');
-  print('Usage: dart run lazy_loc [options]');
-  print('');
-  print('Options:');
-  print(parser.usage);
+  Logger.info('LazyLoc - Lightweight Flutter Localization Tool');
+  Logger.info('');
+  Logger.info('Usage: dart run lazy_loc [options]');
+  Logger.info('');
+  Logger.info('Options:');
+  Logger.info(parser.usage);
 }

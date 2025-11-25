@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'logger.dart';
 import 'backup_manager.dart';
 import 'config.dart';
 
@@ -26,7 +27,7 @@ class TranslationManager {
         existingData = jsonDecode(content);
         await backupManager.createBackup(file, lang);
       } catch (e) {
-        print(
+        Logger.warn(
           '⚠️ Failed to parse $lang.json. Starting with empty file after backup.',
         );
         await backupManager.createBackup(file, lang);
@@ -53,7 +54,7 @@ class TranslationManager {
     const encoder = JsonEncoder.withIndent('  ');
     await file.writeAsString(encoder.convert(sortedMap));
 
-    print(
+    Logger.info(
       '   📄 [$lang] Processed: Existing ${existingData.length} + New $addedCount',
     );
   }
