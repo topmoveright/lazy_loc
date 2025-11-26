@@ -21,7 +21,7 @@ class LazyLoc {
 
     try {
       String jsonString = await rootBundle.loadString(assetPath);
-      Map<String, String> jsonMap = json.decode(jsonString);
+      Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       // Store loaded data in static variable
       _localizedValues = jsonMap.map<String, String>(
@@ -70,7 +70,7 @@ class LazyLocDelegate extends LocalizationsDelegate<LazyLoc> {
 
   @override
   Future<LazyLoc> load(Locale locale) async {
-    return await LazyLoc.load(locale);
+    return await LazyLoc.load(locale, path: path);
   }
 
   @override
