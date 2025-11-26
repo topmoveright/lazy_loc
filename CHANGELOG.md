@@ -1,3 +1,8 @@
+## 0.0.5
+
+* fix: Fix type safety and delegate path parameter handling
+* feat: Add source language option to skip empty value warnings
+
 ## 0.0.4
 
 * Feat: Add escape sequence handling for translation keys
