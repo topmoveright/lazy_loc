@@ -18,6 +18,7 @@ class TranslationManager {
     String lang,
     Set<String> codeKeys, {
     String sortOption = 'empty-first',
+    String? sourceLang,
   }) async {
     final filePath = p.join(targetDir, '$lang.json');
     final file = File(filePath);
@@ -60,8 +61,21 @@ class TranslationManager {
     const encoder = JsonEncoder.withIndent('  ');
     await file.writeAsString(encoder.convert(sortedMap));
 
+    // Calculate missing (empty) entries
+    int emptyCount = 0;
+    for (var value in sortedMap.values) {
+      if (value.toString().isEmpty) emptyCount++;
+    }
+
+    String statusMsg;
+    if (lang == sourceLang) {
+      statusMsg = '(Source Lang - Skipped Empty Check)';
+    } else {
+      statusMsg = emptyCount > 0 ? '⚠️ Missing: $emptyCount' : '✅';
+    }
+
     Logger.info(
-      '   📄 [$lang] Processed: Existing ${existingData.length} + New $addedCount (Sort: $sortOption)',
+      '   📄 [$lang] Processed: Existing ${existingData.length} + New $addedCount $statusMsg',
     );
   }
 

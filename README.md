@@ -132,8 +132,18 @@ Fill in the translations manually or use AI:
 You can customize the scanner behavior with command-line arguments:
 
 ```bash
+# Basic Usage --l <langs> --S <source_lang>
+dart run lazy_loc --l en,ko,ja --S en
+
 # Show help
 dart run lazy_loc --help
+
+# Specify target languages (comma-separated)
+# Default: en
+dart run lazy_loc --langs en,ko,ja,es
+
+# Specify source language to skip empty value warnings
+dart run lazy_loc --source-lang en
 
 # Scan specific path (glob pattern)
 dart run lazy_loc --path "lib/features/**.dart"
@@ -145,9 +155,6 @@ dart run lazy_loc --output "assets/i18n"
 # Default: empty-first (Groups empty/untranslated keys at the top)
 dart run lazy_loc --sort empty-first
 
-# Specify target languages (comma-separated)
-# Default: ko,en
-dart run lazy_loc --langs en,ko,ja,es
 ```
 
 ## Workflow

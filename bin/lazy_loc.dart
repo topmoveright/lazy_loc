@@ -32,6 +32,11 @@ void main(List<String> arguments) async {
       defaultsTo: 'empty-first',
       help: 'Sort order of keys in output files',
     )
+    ..addOption(
+      'source-lang',
+      abbr: 'S',
+      help: 'Source language code (e.g. ko) to skip empty value warnings',
+    )
     ..addMultiOption(
       'langs',
       abbr: 'l',
@@ -50,6 +55,7 @@ void main(List<String> arguments) async {
     final globPattern = argResults['path'] as String;
     final targetDir = argResults['output'] as String;
     final sortOption = argResults['sort'] as String;
+    final sourceLang = argResults['source-lang'] as String?;
     final rawLangs = argResults['langs'] as List<String>;
 
     // Clean up languages (trim whitespace)
@@ -68,6 +74,9 @@ void main(List<String> arguments) async {
     Logger.info('   Scanning: $globPattern');
     Logger.info('   Output: $targetDir');
     Logger.info('   Languages: $targetLangs');
+    if (sourceLang != null) {
+      Logger.info('   Source: $sourceLang');
+    }
     Logger.info('   Sort: $sortOption');
     Logger.info('');
 
@@ -93,6 +102,7 @@ void main(List<String> arguments) async {
         lang,
         codeKeys,
         sortOption: sortOption,
+        sourceLang: sourceLang,
       );
     }
 

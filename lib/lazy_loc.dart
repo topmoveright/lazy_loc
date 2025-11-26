@@ -17,7 +17,7 @@ class LazyLoc {
     // e.g. ko -> read assets/translations/ko.json
     // Using languageCode (e.g. 'en', 'ko') to match generated files
     final String fileName = locale.languageCode;
-    final String assetPath = '$_path/$fileName.json';
+    final String assetPath = '$path/$fileName.json';
 
     try {
       String jsonString = await rootBundle.loadString(assetPath);
