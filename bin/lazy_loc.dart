@@ -81,9 +81,10 @@ void main(List<String> arguments) async {
     Logger.info('');
 
     // 1. Scan
-    Logger.info('⏳ Scanning for .tr() calls...');
+    Logger.info('⏳ Scanning for .tr() and trKey() calls...');
     final scanner = CodeScanner(globPattern: globPattern);
-    final codeKeys = await scanner.scan();
+    final scanResult = await scanner.scanWithWarnings();
+    final codeKeys = scanResult.keys;
 
     if (codeKeys.isEmpty) {
       Logger.warn('⚠️  No translation keys found.');
@@ -92,6 +93,23 @@ void main(List<String> arguments) async {
       );
     } else {
       Logger.info('🔍 Found ${codeKeys.length} unique keys in code.');
+    }
+
+    // Warn about variable .tr() calls that cannot be extracted
+    if (scanResult.warnings.isNotEmpty) {
+      Logger.warn('');
+      Logger.warn(
+        '⚠️  Found ${scanResult.warnings.length} variable-based .tr() call(s) that cannot be extracted:',
+      );
+      for (var warning in scanResult.warnings) {
+        Logger.warn('   ${warning.filePath}:${warning.line}');
+        Logger.warn('      ${warning.matchedText}');
+      }
+      Logger.warn('');
+      Logger.warn(
+        '   💡 Tip: Use LazyLoc.trKey(\'key\') instead of variable.tr() for extractable keys.',
+      );
+      Logger.warn('');
     }
 
     // 2. Process

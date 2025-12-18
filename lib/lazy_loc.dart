@@ -45,6 +45,22 @@ class LazyLoc {
         : key;
   }
 
+  /// Registers and translates a key.
+  /// Use this instead of variable.tr() for keys that need to be extracted.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Instead of:
+  /// final key = 'status.loading';
+  /// print(key.tr()); // NOT extractable!
+  ///
+  /// // Use:
+  /// print(LazyLoc.trKey('status.loading')); // Extractable!
+  /// ```
+  static String trKey(String key) {
+    return translate(key);
+  }
+
   // Helper to access from Flutter tree (optional)
   static LazyLoc? of(BuildContext context) {
     return Localizations.of<LazyLoc>(context, LazyLoc);
