@@ -1,3 +1,9 @@
+## 0.0.6
+
+* feat: Add `LazyLoc.trKey()` function for extractable dynamic translation keys
+* feat: Add warning detection for variable-based `.tr()` calls that cannot be extracted
+* feat: CLI now scans both `.tr()` and `trKey()` patterns
+
 ## 0.0.5
 
 * fix: Fix type safety and delegate path parameter handling

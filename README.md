@@ -16,7 +16,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  lazy_loc: ^0.0.5
+  lazy_loc: ^0.0.6
   flutter_localizations:
     sdk: flutter
 ```
@@ -94,6 +94,41 @@ Text('hello'.tr())
 Text('welcome_message'.tr())
 ```
 
+#### Using `trKey()` for Dynamic Keys
+
+When you need to use translation keys stored in variables (e.g., enum mappings), use `LazyLoc.trKey()` instead of `.tr()`. This ensures the keys can be extracted by the CLI tool.
+
+```dart
+// ❌ NOT extractable - CLI cannot detect these keys
+final key = 'status.loading';
+print(key.tr());  // Warning will be shown
+
+// ✅ Extractable - CLI can detect these keys
+print(LazyLoc.trKey('status.loading'));
+```
+
+**Real-world example with enums:**
+
+```dart
+enum Status { loading, success, error }
+
+extension StatusExt on Status {
+  String get label {
+    switch (this) {
+      case Status.loading:
+        return LazyLoc.trKey('status.loading');  // ✅ Extractable
+      case Status.success:
+        return LazyLoc.trKey('status.success');
+      case Status.error:
+        return LazyLoc.trKey('status.error');
+    }
+  }
+}
+
+// Usage
+Text(status.label)  // Already translated
+```
+
 ### 4. Generate Translation Files
 
 Run the CLI tool to scan your code and generate/update translation files:
@@ -103,9 +138,10 @@ dart run lazy_loc
 ```
 
 This will:
-- Scan all `.dart` files in `lib/` for `.tr()` calls
+- Scan all `.dart` files in `lib/` for `.tr()` and `trKey()` calls
 - Create/update JSON files in `assets/translations/` for each language
 - Backup existing files to `assets/translations/_backup/`
+- **Warn about variable-based `.tr()` calls** that cannot be extracted
 
 ### 5. Fill in Translations
 
